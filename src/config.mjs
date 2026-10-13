@@ -39,7 +39,10 @@ export function loadConfig(file) {
 
   if (!Array.isArray(cfg.scenes) || cfg.scenes.length === 0) throw new Error(`${file}: "scenes" must be a non-empty list`);
   cfg.scenes = cfg.scenes.map((s, i) => {
-    if (!s.command) throw new Error(`${file}: scene #${i + 1} has no "command"`);
+    const kinds = ['command', 'image', 'html', 'url'].filter((k) => s[k] != null);
+    if (kinds.length !== 1) throw new Error(`${file}: scene #${i + 1} needs exactly one of "command", "image", "html" or "url"`);
+    if (s.image) s = { ...s, image: resolve(base, s.image) };
+    if (s.html && !s.html.trimStart().startsWith('<')) s = { ...s, html: resolve(base, s.html) };
     const say = typeof s.say === 'string' ? Object.fromEntries(Object.keys(cfg.languages).map((l) => [l, s.say])) : (s.say ?? {});
     return { name: s.name ?? `scene-${i + 1}`, run: s.run ?? s.command, ...s, say };
   });

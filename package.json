@@ -1,6 +1,6 @@
 {
   "name": "@vefimov/termdub",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Narrated terminal demo videos from real command output, in any language.",
   "type": "module",
   "bin": {
@@ -38,5 +38,15 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./tts": "./src/tts/index.mjs",
+    "./frames": "./src/frames.mjs",
+    "./video": "./src/video.mjs",
+    "./capture": "./src/capture.mjs",
+    "./package.json": "./package.json",
+    "./util": "./src/util.mjs",
+    "./compose": "./src/compose.mjs"
   }
 }

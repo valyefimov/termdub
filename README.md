@@ -187,6 +187,56 @@ scenes:
     hold: 4                  # minimum scene length, seconds
 ```
 
+### Scenes that aren't a terminal
+
+A scene can show something other than command output: your editor, a browser, a design, a slide.
+Use one of these instead of `command`:
+
+```yaml
+scenes:
+  - image: shots/editor.png          # a ready PNG/JPG, scaled to fit the frame
+    say: Here is the config open in the editor.
+  - html: slides/intro.html          # an HTML file (or inline HTML starting with "<")
+    say: A slide I drew in HTML.
+  - url: http://localhost:3000       # any page, screenshotted with headless Chrome
+    say: And this is the running app.
+    hold: 5
+```
+
+These scenes get narration, `hold`, screenshots and the poster just like terminal scenes. You can mix them
+with `command` scenes in one video. `image` and `html` paths are relative to the config file.
+
+## Use it as a library
+
+For anything YAML can't express (an editor with highlighted lines, a slide deck, captions that follow the voice),
+draw the frames yourself and let termdub do the narration, screenshots and ffmpeg:
+
+```js
+import { compose } from '@vefimov/termdub';
+
+await compose({
+  out: 'media/demo.mp4',
+  size: { width: 1280, height: 720 },
+  tts: { provider: 'elevenlabs', voice: 'JBFqnCBsd6RMkjVDRZzb' },
+  poster: { at: 3 },
+  scenes: [
+    {
+      say: 'First sentence. Then the second one.',
+      cuts: [0.3, 0.6],                       // extra moments to redraw, in seconds
+      frame: ({ t, caption }) => `<body>…${caption}…</body>`,
+    },
+  ],
+});
+```
+
+Narration is synthesised sentence by sentence, so `frame` is called at every sentence boundary and at every time
+in `cuts`. It gets `t` (seconds into the scene), `caption` (the sentence being spoken, empty in pauses), `sentence`,
+`speaking`, `index` and `duration`, and returns an HTML string, `{ html }`, `{ url }` or `{ image }`.
+Identical frames are screenshotted once. Other options: `timing: { lead, tail, gap }`, `silent`, and per scene `hold`.
+
+The pieces are exported too: `getProvider`, `createShooter`, `assemble`, `poster`, `capture`, `duration`, `ffmpeg`
+(also as `@vefimov/termdub/tts`, `/frames`, `/video`, `/capture`, `/util`, `/compose`).
+
 Commands run through `sh -c` with `FORCE_COLOR=3` and `CLICOLOR_FORCE=1` set, which keeps colors on in most tools.
 If a command exits with an error, termdub prints a warning and still uses its output.
 

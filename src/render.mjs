@@ -1,8 +1,9 @@
 import { mkdirSync, rmSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import { ansiToHtml, terminalPage } from './ansi.mjs';
 import { capture } from './capture.mjs';
-import { createShooter } from './frames.mjs';
+import { createShooter, toSource } from './frames.mjs';
 import { getProvider } from './tts/index.mjs';
 import { assemble, poster } from './video.mjs';
 
@@ -30,8 +31,23 @@ export async function render(cfg, { langs, silent = false } = {}) {
     return file;
   };
 
+  // scenes that aren't a terminal: a ready image, an HTML page or any URL
+  const still = (s) => {
+    if (s.image) return toSource({ image: s.image });
+    if (s.url) return toSource({ url: s.url });
+    return s.html.trimStart().startsWith('<') ? s.html : toSource({ url: pathToFileURL(s.html).href });
+  };
+
   const scenes = [];
   for (const s of cfg.scenes) {
+    if (!s.command) {
+      const source = still(s);
+      const result = frame(source);
+      if (cfg.output.screenshots) shoot(source, join(shotsDir, `${s.name}.png`));
+      scenes.push({ ...s, typing: [], result });
+      console.log(`✔ ${s.name}`);
+      continue;
+    }
     const output = s.output ?? run(s.run);
     const typing = [];
     const steps = Math.min(cfg.typing.frames, s.command.length);
