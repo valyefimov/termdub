@@ -3,14 +3,37 @@
   "version": "0.1.0",
   "description": "Narrated terminal demo videos from real command output, in any language.",
   "type": "module",
-  "bin": { "termdub": "bin/termdub.mjs" },
-  "files": ["bin", "src"],
-  "engines": { "node": ">=20.12" },
+  "bin": {
+    "termdub": "bin/termdub.mjs"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "engines": {
+    "node": ">=20.12"
+  },
   "scripts": {
     "example": "node bin/termdub.mjs render examples/hello/demo.yaml"
   },
-  "keywords": ["demo", "terminal", "cli", "video", "tts", "narration", "elevenlabs", "edge-tts", "ffmpeg"],
+  "keywords": [
+    "demo",
+    "terminal",
+    "cli",
+    "video",
+    "tts",
+    "narration",
+    "elevenlabs",
+    "edge-tts",
+    "ffmpeg"
+  ],
   "author": "Valentyn Yefimov",
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/valyefimov/termdub.git" }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valyefimov/termdub.git"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  }
 }
