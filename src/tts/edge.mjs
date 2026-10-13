@@ -19,7 +19,7 @@ export default {
         execFileSync(bin, args, { stdio: 'ignore' });
         return;
       } catch (err) {
-        if (attempt === 6) throw err;
+        if (attempt === 4) throw err;
         await sleep(attempt * 2000);
       }
     }
