@@ -59,7 +59,7 @@ export async function render(cfg, { langs, silent = false } = {}) {
         const text = s.say[lang];
         if (!text) { audio.push(null); continue; }
         const mp3 = join(workDir, `${lang}-${i}.mp3`);
-        await provider.synthesize({ text, lang, voice: opts.voice, rate: opts.rate ?? cfg.tts.rate, ...cfg.tts, ...opts }, mp3);
+        await provider.synthesize({ ...cfg.tts, ...opts, text, lang, rate: opts.rate ?? cfg.tts.rate }, mp3);
         audio.push(mp3);
       }
     }
