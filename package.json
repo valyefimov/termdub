@@ -1,6 +1,6 @@
 {
   "name": "@vefimov/termdub",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Narrated terminal demo videos from real command output, in any language.",
   "type": "module",
   "bin": {
