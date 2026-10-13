@@ -5,3 +5,5 @@ node_modules/
 *.png
 !docs/**/*.png
 .DS_Store
+examples/**/sandbox/
+media/

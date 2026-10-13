@@ -1,0 +1,32 @@
+# Minimal termdub config. Render with:  npx termdub render examples/hello/demo.yaml
+title: ~/code/hello
+cwd: .                      # where commands run (relative to this file)
+setup:                      # run before the first scene, not shown
+  - rm -rf sandbox && mkdir sandbox && cd sandbox && git init -q
+
+tts:
+  provider: edge            # edge | elevenlabs | openai | say
+  rate: "+4%"
+
+languages:                  # first one is the main video (demo.mp4)
+  en: { voice: en-US-BrianNeural, fallback: Eddy (English (US)) }
+  ru: { voice: ru-RU-DmitryNeural, fallback: Milena }   # fallback = macOS `say` voice
+  uk: { voice: uk-UA-OstapNeural, fallback: Lesya }
+
+output:
+  dir: ../../media
+  name: hello
+
+scenes:
+  - name: ls
+    command: ls -l ../../src
+    say:
+      en: Here is a plain directory listing, captured from a real shell.
+      ru: Вот обычный список файлов, снятый с настоящего терминала.
+      uk: Ось звичайний список файлів, знятий зі справжнього терміналу.
+  - name: git
+    command: git -C sandbox status
+    say:
+      en: And git status, with the colors you would see on your own screen.
+      ru: А это git status — с теми же цветами, что у тебя на экране.
+      uk: А це git status — з тими самими кольорами, що в тебе на екрані.
