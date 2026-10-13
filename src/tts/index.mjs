@@ -1,7 +1,8 @@
 import edge from './edge.mjs';
+import elevenlabs from './elevenlabs.mjs';
 import say from './say.mjs';
 
-export const PROVIDERS = { edge, say };
+export const PROVIDERS = { edge, elevenlabs, say };
 
 export function getProvider(name) {
   const p = PROVIDERS[name];
