@@ -34,13 +34,14 @@ export function loadConfig(file) {
   cfg.output.dir = resolve(base, cfg.output.dir);
   cfg.setup = [].concat(cfg.setup);
 
+  // the first language is the "main" one: its video gets no suffix
+  if (Object.keys(cfg.languages).length === 0) cfg.languages = { en: {} };
+
   if (!Array.isArray(cfg.scenes) || cfg.scenes.length === 0) throw new Error(`${file}: "scenes" must be a non-empty list`);
   cfg.scenes = cfg.scenes.map((s, i) => {
     if (!s.command) throw new Error(`${file}: scene #${i + 1} has no "command"`);
     const say = typeof s.say === 'string' ? Object.fromEntries(Object.keys(cfg.languages).map((l) => [l, s.say])) : (s.say ?? {});
     return { name: s.name ?? `scene-${i + 1}`, run: s.run ?? s.command, ...s, say };
   });
-  // the first language is the "main" one: its video gets no suffix
-  if (Object.keys(cfg.languages).length === 0) cfg.languages = { en: {} };
   return cfg;
 }
