@@ -1,0 +1,6 @@
+title: ~/code/my-tool
+scenes:
+  - command: git log --oneline -3
+    say: Here's what changed lately.
+  - command: ls
+    say: Hello from termdub.

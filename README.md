@@ -9,6 +9,11 @@ a PNG of every scene and a poster frame.
 
 When your CLI changes, run termdub again to get a fresh demo.
 
+[![termdub demo](docs/demo-poster.png)](docs/demo.mp4)
+
+The video above was made by termdub itself, from [docs/demo/demo.yaml](docs/demo/demo.yaml).
+Rebuild it with `node bin/termdub.mjs render docs/demo/demo.yaml`.
+
 ```
 demo.yaml ──▶ run commands ──▶ ANSI → HTML ──▶ headless Chrome frames ─┐
                                                                        ├─▶ ffmpeg ──▶ demo.mp4, demo.ru.mp4, …
@@ -148,6 +153,7 @@ setup:                       # commands run before the first scene (not shown)
 env: { NO_UPDATE_NOTIFIER: "1" }
 replace:                     # rewrite text in the output, e.g. hide absolute paths
   /Users/me/work/shop: ~/code/shop
+  $CWD: .                    # $CWD is the absolute path of `cwd`
 columns: 100                 # $COLUMNS given to commands
 
 window: { width: 1280, height: 720, fontSize: 17 }

@@ -13,6 +13,6 @@ export function capture(command, { cwd, env = {}, columns = 100, replace = {} } 
   if (res.error) throw res.error;
   if (res.status !== 0) console.warn(`! "${command}" exited with ${res.status}`);
   let out = res.stdout.toString().replace(/\r\n?/g, '\n');
-  for (const [from, to] of Object.entries(replace)) out = out.replaceAll(from, to);
+  for (const [from, to] of Object.entries(replace)) out = out.replaceAll(from.replaceAll('$CWD', cwd), to);
   return out;
 }

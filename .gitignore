@@ -7,3 +7,6 @@ node_modules/
 .DS_Store
 examples/**/sandbox/
 media/
+
+!docs/*.mp4
+docs/demo/project/media/

@@ -1,0 +1,37 @@
+# termdub rendering its own demo. Run from the repo root:
+#   node bin/termdub.mjs render docs/demo/demo.yaml
+title: ~/code/my-tool
+cwd: project
+setup:
+  - rm -rf media
+replace:
+  $CWD: .
+
+tts:
+  provider: elevenlabs
+  model: eleven_multilingual_v2
+  stability: 0.4
+  style: 0.3
+
+languages:
+  en: { voice: iP95p4xoKVk53GoZ742B }   # Chris
+
+output:
+  dir: ..
+  name: demo
+
+scenes:
+  - name: config
+    command: cat demo.yaml
+    say: This is termdub. You describe your demo in a small YAML file. Commands, and what the narrator should say over each one.
+  - name: render
+    command: termdub render demo.yaml --silent
+    run: node ../../../bin/termdub.mjs render demo.yaml --silent
+    say: Then you run one command. It runs everything for real, draws the output in a terminal window, and builds a video for every language.
+  - name: files
+    command: ls media media/screenshots
+    say: You get an MP4 per language, a screenshot of every scene, and a poster. Voices come from ElevenLabs, OpenAI, or free Edge voices.
+  - name: install
+    command: npm install -D @vefimov/termdub
+    output: "\nadded 2 packages in 1s\n"
+    say: When your tool changes, just render again. Install it from npm, and your README gets a demo that never goes stale.
