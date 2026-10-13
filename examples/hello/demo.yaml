@@ -1,4 +1,4 @@
-# Minimal termdub config. Render with:  npx termdub render examples/hello/demo.yaml
+# Minimal termdub config. Render with:  npx @vefimov/termdub render examples/hello/demo.yaml
 title: ~/code/hello
 cwd: .                      # where commands run (relative to this file)
 setup:                      # run before the first scene, not shown

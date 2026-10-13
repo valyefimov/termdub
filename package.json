@@ -1,5 +1,5 @@
 {
-  "name": "termdub",
+  "name": "@vefimov/termdub",
   "version": "0.1.0",
   "description": "Narrated terminal demo videos from real command output, in any language.",
   "type": "module",

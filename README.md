@@ -35,13 +35,13 @@ narration, and every language gets its own `say:` line and its own video.
 ## Install
 
 ```bash
-npm install -D termdub
+npm install -D @vefimov/termdub
 ```
 
 Or run it without installing:
 
 ```bash
-npx termdub render demo.yaml
+npx @vefimov/termdub render demo.yaml
 ```
 
 ## Quick start
@@ -59,7 +59,7 @@ scenes:
 ```
 
 ```bash
-npx termdub render demo.yaml
+npx @vefimov/termdub render demo.yaml
 ```
 
 The files land in `media/`:
@@ -198,7 +198,7 @@ termdub render [config]     render videos + screenshots (default: demo.yaml)
 - Write each language's narration on its own and keep it casual. Word-for-word translations sound stiff when read aloud.
 - One or two sentences per scene is plenty. A long line keeps the same frame on screen for a long time.
 - Build a throwaway sandbox with `setup` and `cwd` so every run starts from the same state.
-- In CI, run `npx termdub render` and either commit the videos or upload them as build artifacts.
+- In CI, run `npx @vefimov/termdub render` and either commit the videos or upload them as build artifacts.
 
 ## License
 
