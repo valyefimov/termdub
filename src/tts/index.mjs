@@ -1,8 +1,9 @@
 import edge from './edge.mjs';
 import elevenlabs from './elevenlabs.mjs';
+import openai from './openai.mjs';
 import say from './say.mjs';
 
-export const PROVIDERS = { edge, elevenlabs, say };
+export const PROVIDERS = { edge, elevenlabs, openai, say };
 
 export function getProvider(name) {
   const p = PROVIDERS[name];
