@@ -1,0 +1,7 @@
+node_modules/
+.termdub/
+.env
+*.mp4
+*.png
+!docs/**/*.png
+.DS_Store
