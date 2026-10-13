@@ -28,5 +28,5 @@ scenes:
     command: git -C sandbox status
     say:
       en: And git status, with the colors you would see on your own screen.
-      ru: А это git status — с теми же цветами, что у тебя на экране.
-      uk: А це git status — з тими самими кольорами, що в тебе на екрані.
+      ru: А это git status, с теми же цветами, что у тебя на экране.
+      uk: А це git status, з тими самими кольорами, що в тебе на екрані.

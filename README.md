@@ -1,13 +1,13 @@
 # termdub
 
-**Narrated terminal demo videos from real command output, in any language.**
+Narrated terminal demo videos made from real command output.
 
-You write a short YAML file listing commands and what to say over each one. termdub runs the commands,
-draws their real colored output in a terminal window, voices your lines with a neural TTS
-(ElevenLabs, OpenAI, Microsoft Edge voices or macOS `say`), and gives you an MP4 for every language,
-plus PNG screenshots of each scene and a poster frame.
+You list a few commands in a YAML file and write what the narrator should say over each one.
+termdub runs the commands, draws their colored output in a fake terminal window and reads your lines
+with a TTS voice (ElevenLabs, OpenAI, Microsoft Edge or macOS `say`). You get one MP4 per language,
+a PNG of every scene and a poster frame.
 
-When your CLI changes, run it again and the demo is up to date. No screen recording and no editing.
+When your CLI changes, run termdub again to get a fresh demo.
 
 ```
 demo.yaml ──▶ run commands ──▶ ANSI → HTML ──▶ headless Chrome frames ─┐
@@ -17,22 +17,20 @@ demo.yaml ──▶ run commands ──▶ ANSI → HTML ──▶ headless Chro
 
 ## Why
 
-Demos for CLI tools are usually a silent GIF (VHS, asciinema) or a video someone edited by hand.
-Both go stale as soon as the output changes. termdub keeps the demo as code:
+Most CLI demos are a silent GIF recorded with VHS or asciinema, or a video someone cut by hand.
+Both are out of date the next time the output changes. I wanted the demo to live in the repo as a
+config file and rebuild with one command, locally or in CI.
 
-- **Real output.** The frames come from actually running the commands. Nothing is mocked up.
-- **Voice-over in several languages.** One `say:` block per scene, one video per language.
-- **Rebuilt with one command.** Works locally or in CI.
-- **Timing follows the voice.** Each scene stays on screen as long as its narration lasts.
-
-The typing animation is simulated: the command appears in a few frames, then the real output is shown.
+The output in the frames comes from running the commands for real. The typing is faked: the command
+shows up over a few frames, then the output appears. Each scene stays on screen for as long as its
+narration, and every language gets its own `say:` line and its own video.
 
 ## Requirements
 
 - Node.js 20.12 or newer
-- Google Chrome or Chromium. The usual install paths are detected; otherwise set `CHROME=/path/to/chrome`
+- Google Chrome or Chromium. termdub looks in the usual places; if yours is elsewhere, set `CHROME=/path/to/chrome`
 - `ffmpeg` and `ffprobe` (`brew install ffmpeg`)
-- One TTS provider (see below)
+- A TTS provider (see below)
 
 ## Install
 
@@ -40,7 +38,7 @@ The typing animation is simulated: the command appears in a few frames, then the
 npm install -D termdub
 ```
 
-or run it without installing:
+Or run it without installing:
 
 ```bash
 npx termdub render demo.yaml
@@ -64,7 +62,7 @@ scenes:
 npx termdub render demo.yaml
 ```
 
-Output goes to `media/`:
+The files land in `media/`:
 
 ```
 media/demo.mp4
@@ -72,31 +70,31 @@ media/demo-poster.png
 media/screenshots/scene-1.png, scene-2.png
 ```
 
-A complete example in three languages is in [examples/hello/demo.yaml](examples/hello/demo.yaml).
+There's a full three-language example in [examples/hello/demo.yaml](examples/hello/demo.yaml).
 
 ## Voices (TTS providers)
 
-Set the provider globally with `tts.provider`, or per language with `languages.<code>.provider`.
+Pick a provider with `tts.provider`. You can override it for one language with `languages.<code>.provider`.
 
 | Provider     | Quality         | Needs                          | `voice` is                                       |
 |--------------|-----------------|--------------------------------|--------------------------------------------------|
-| `elevenlabs` | best, most natural | `ELEVENLABS_API_KEY`        | an ElevenLabs voice ID                           |
+| `elevenlabs` | the most natural | `ELEVENLABS_API_KEY`          | an ElevenLabs voice ID                           |
 | `openai`     | very good       | `OPENAI_API_KEY`               | `alloy`, `ash`, `coral`, `sage`, …               |
 | `edge`       | good, free      | `pip install edge-tts`, internet | `en-US-BrianNeural` etc. (`edge-tts --list-voices`) |
-| `say`        | robotic, offline | macOS                         | a macOS voice name (`say -v '?'`)                |
+| `say`        | robotic, works offline | macOS                   | a macOS voice name (`say -v '?'`)                |
 
 ### ElevenLabs
 
 1. Create an API key at <https://elevenlabs.io/app/settings/api-keys>.
-2. Put it in a `.env` file next to where you run termdub. termdub loads `.env` automatically:
+2. Put it in a `.env` file in the directory you run termdub from. termdub reads that file on start:
 
    ```bash
    cp .env.example .env
    # ELEVENLABS_API_KEY=sk_...
    ```
 
-   You can also export it in your shell or set it as a CI secret.
-3. Pick a voice in the [Voice Library](https://elevenlabs.io/app/voice-library) and copy its **voice ID**.
+   Exporting it in your shell or setting it as a CI secret works too.
+3. Find a voice you like in the [Voice Library](https://elevenlabs.io/app/voice-library) and copy its voice ID.
 
 ```yaml
 tts:
@@ -110,10 +108,10 @@ languages:
   uk: { voice: JBFqnCBsd6RMkjVDRZzb }
 ```
 
-The default multilingual model handles the language by itself, so you can reuse the same voice ID for every language.
-With `eleven_turbo_*` or `eleven_flash_*` models, termdub also sends the language code.
+The default multilingual model figures out the language from the text, so one voice ID can cover every language.
+For `eleven_turbo_*` and `eleven_flash_*` models termdub also sends the language code.
 
-Never commit `.env`. It is already listed in `.gitignore`.
+Don't commit `.env`. It's in `.gitignore` already.
 
 ### OpenAI
 
@@ -128,16 +126,17 @@ languages:
 
 ### Edge (free)
 
-`edge-tts` uses Microsoft Edge's read-aloud voices through an unofficial endpoint. It is great for drafts,
-but it sometimes answers 403, and some voices (currently `ru-RU-*`) are refused completely.
-termdub retries, and on macOS it falls back to `say` for the failed line. Set the `say` voice it should use with `fallback`:
+`edge-tts` talks to Microsoft Edge's read-aloud service through an unofficial endpoint. The voices are good
+and cost nothing, so it's handy for drafts. The catch is that it sometimes answers 403, and right now it
+refuses the `ru-RU-*` voices every time. termdub retries a few times. If that fails on a Mac, it reads that
+one line with `say` instead, using the voice you set in `fallback`:
 
 ```yaml
 languages:
   ru: { voice: ru-RU-DmitryNeural, fallback: Milena }
 ```
 
-For anything public, use ElevenLabs or OpenAI.
+If the video is going out in public, I'd use ElevenLabs or OpenAI.
 
 ## Config reference
 
@@ -182,8 +181,8 @@ scenes:
     hold: 4                  # minimum scene length, seconds
 ```
 
-Commands run through `sh -c` with `FORCE_COLOR=3` and `CLICOLOR_FORCE=1`, so most tools keep their colors.
-A command that exits with an error is still captured; termdub prints a warning.
+Commands run through `sh -c` with `FORCE_COLOR=3` and `CLICOLOR_FORCE=1` set, which keeps colors on in most tools.
+If a command exits with an error, termdub prints a warning and still uses its output.
 
 ## CLI
 
@@ -196,10 +195,10 @@ termdub render [config]     render videos + screenshots (default: demo.yaml)
 
 ## Tips
 
-- Write the narration for each language separately, in a conversational tone. Don't translate word for word.
-- Keep each line to one or two sentences. The scene lasts as long as its line.
-- Use `setup` and `cwd` to build a throwaway sandbox, so the demo is the same on every run.
-- Add `npx termdub render` to CI and commit the result, or publish it as a build artifact.
+- Write each language's narration on its own and keep it casual. Word-for-word translations sound stiff when read aloud.
+- One or two sentences per scene is plenty. A long line keeps the same frame on screen for a long time.
+- Build a throwaway sandbox with `setup` and `cwd` so every run starts from the same state.
+- In CI, run `npx termdub render` and either commit the videos or upload them as build artifacts.
 
 ## License
 
