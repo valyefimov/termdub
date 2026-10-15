@@ -141,6 +141,9 @@ languages:
   ru: { voice: ru-RU-DmitryNeural, fallback: Milena }
 ```
 
+For English, `voice` can be left out: edge falls back to `en-US-AndrewNeural` (a warm male US voice).
+Other languages need an explicit `voice`.
+
 If the video is going out in public, I'd use ElevenLabs or OpenAI.
 
 ## Config reference
